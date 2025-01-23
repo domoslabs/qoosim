@@ -34,6 +34,7 @@ def plot_simulation_results(input_folder, output_file="simulation_plots.png"):
         axes[i, 0].plot(time_stamps, sojourn_times, color="blue")
         axes[i, 0].set_ylabel("Sojourn Time (s)", fontsize=14)  # Increased font size
         axes[i, 0].grid(True, linestyle='--', alpha=0.7)
+        axes[i, 0].set_title(f"Run {i+1}", fontsize=16)  # Increased font size
 
         # CDF plot
         sorted_times = np.sort(sojourn_times)
@@ -59,5 +60,5 @@ def plot_simulation_results(input_folder, output_file="simulation_plots.png"):
 
 if __name__ == "__main__":
     experiment = "wifi" # "wifi", "bufferbloat_1sec", "bufferbloat_5sec" or "service_outage"
-    input_folder = f"{experiment}_simulation_results_longer_duration"
+    input_folder = f"{experiment}_simulation_results"
     plot_simulation_results(input_folder=input_folder, output_file=f"{experiment}_simulation_time_series_cdf_readable.png")

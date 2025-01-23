@@ -6,19 +6,22 @@ from qoo_analysis_of_requirement_sensitivity import run_qoo_one_pair_per_row_hyb
 for experiment in ["bufferbloat_1sec", "bufferbloat_5sec", "service_outage", "wifi"]:
     input_folder = f"{experiment}_simulation_results"
     
+    simulation_time = 300 # seconds
+    
     nrp = {95.0: 0.100, 99.0: 0.200, 'loss': 0.1}
-    nrpou = {95.0: 0.400, 99.0: 0.450, 'loss': 1.0}
+    nrpou = {95.0: 0.450, 99.0: 0.650, 'loss': 1.0}
     
     plot_simulation_results(input_folder=input_folder, output_file=f"{experiment}_simulation_time_series_cdf_readable.png")
 
-    run_qoo_stability_analysis(
+    run_qoo_stability_analysis( 
         input_folder=input_folder,
         nrp=nrp,
         nrpou=nrpou,
         original_frequency=1000,
         sub_frequencies=[0.05, 0.1, 0.2, 1, 5, 10, 50, 100],
         iterations=100,
-        output_file=f"qoo_stability_analysis_{experiment}.png"
+        output_file=f"qoo_stability_analysis_{experiment}.png",
+        simulation_time=simulation_time
     )
     
     run_qoo_measurement_accuracy_stability_analysis(
@@ -28,7 +31,8 @@ for experiment in ["bufferbloat_1sec", "bufferbloat_5sec", "service_outage", "wi
         original_frequency=1000,
         iterations=100,
         noise_levels=[0.01, 0.05, 0.1],
-        output_file=f"qoo_stability_analysis_{experiment}_measurement_noise.png"
+        output_file=f"qoo_stability_analysis_{experiment}_measurement_noise.png",
+        simulation_time=simulation_time
     )
     
     nrp_nrpou_pairs_nrpou_fixed = [
@@ -119,7 +123,8 @@ for experiment in ["bufferbloat_1sec", "bufferbloat_5sec", "service_outage", "wi
         sub_frequency=10,
         iterations=100,
         output_file=f"qoo_nrp_var_{experiment}.png",
-        figure_title="Gradually Changing NRP (NRPOU Fixed)"
+        figure_title="Gradually Changing NRP (NRPOU Fixed)",
+        simulation_time=simulation_time
     )
 
     # -- 2) Gradually Increasing NRPOU (NRP fixed)
@@ -130,7 +135,8 @@ for experiment in ["bufferbloat_1sec", "bufferbloat_5sec", "service_outage", "wi
         sub_frequency=10,
         iterations=100,
         output_file=f"qoo_nrpou_var_{experiment}.png",
-        figure_title="Gradually Changing NRPOU (NRP Fixed)"
+        figure_title="Gradually Changing NRPOU (NRP Fixed)",
+        simulation_time=simulation_time
     )
 
     # -- 3) Shifted Percentiles
@@ -141,5 +147,6 @@ for experiment in ["bufferbloat_1sec", "bufferbloat_5sec", "service_outage", "wi
         sub_frequency=10,
         iterations=100,
         output_file=f"qoo_shifted_pct_{experiment}.png",
-        figure_title="Shifting Percentile Definitions"
+        figure_title="Shifting Percentile Definitions",
+        simulation_time=simulation_time
     )

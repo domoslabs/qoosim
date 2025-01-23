@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from simulator import generate_latency_trace
 from simulator import compute_qoo_score, sub_sample_trace_exponential_index_space
 
-def run_qoo_measurement_accuracy_stability_analysis(input_folder, nrp, nrpou, original_frequency=1000, iterations=10, noise_levels=[0.1], output_file="qoo_stability_analysis.png"):
+def run_qoo_measurement_accuracy_stability_analysis(input_folder, nrp, nrpou, original_frequency=1000, iterations=10, noise_levels=[0.1], output_file="qoo_stability_analysis.png", simulation_time=900):
     """Run QoO stability analysis on multiple simulation results.
 
     Parameters:
@@ -26,7 +26,7 @@ def run_qoo_measurement_accuracy_stability_analysis(input_folder, nrp, nrpou, or
     # Analyze each result file
     for result_file in result_files:    
         results = np.load(result_file, allow_pickle=True)
-        latency_trace = generate_latency_trace(results, simulation_time=300, sampling_frequency=original_frequency)
+        latency_trace = generate_latency_trace(results, simulation_time=simulation_time, sampling_frequency=original_frequency)
         ground_truth = latency_trace[:, 1]
         ground_truth_qoo = compute_qoo_score(ground_truth, packet_loss=0, nrp=nrp, nrpou=nrpou)
         stability_scores = {}

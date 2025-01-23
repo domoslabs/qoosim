@@ -19,7 +19,8 @@ def run_qoo_one_pair_per_row_hybrid(
     sub_frequency=50,
     iterations=10,
     output_file="qoo_one_pair_per_row_hybrid.png",
-    figure_title="Latency Requirement & QoO Comparisons"
+    figure_title="Latency Requirement & QoO Comparisons",
+    simulation_time=900
 ):
     """
     Figures produced:
@@ -55,7 +56,7 @@ def run_qoo_one_pair_per_row_hybrid(
     for run_idx, run_file in enumerate(result_files):
         results = np.load(run_file, allow_pickle=True)
         latency_trace = generate_latency_trace(
-            results, simulation_time=300, sampling_frequency=original_frequency
+            results, simulation_time=simulation_time, sampling_frequency=original_frequency
         )
         ground_truth = latency_trace[:, 1]
 
@@ -123,7 +124,7 @@ def run_qoo_one_pair_per_row_hybrid(
         ax_box = axes1[pair_idx][1]
 
         # (A) Left: Requirements
-        ax_req.set_title(f"Pair {pair_idx+1}: Requirements", fontsize=10)
+        ax_req.set_title(f"Requirement R{pair_idx+1}", fontsize=10)
         ax_req.set_xlim(global_min_req_x, global_max_req_x)
         ax_req.grid(True)
 
@@ -152,7 +153,7 @@ def run_qoo_one_pair_per_row_hybrid(
             ax_req.plot(nrpou_dict['loss'], y_loss, 'rx')
 
         # (B) Right: Boxplot across ALL runs
-        ax_box.set_title(f"Pair {pair_idx+1}: QoO (All Runs)", fontsize=10)
+        ax_box.set_title(f"R{pair_idx+1}: QoO (All Runs)", fontsize=10)
         ax_box.set_ylim(global_min_qoo_y, global_max_qoo_y)
         ax_box.set_ylabel("QoO Score")
         ax_box.grid(True)
@@ -189,13 +190,13 @@ def run_qoo_one_pair_per_row_hybrid(
         sharey=True
     )
     axes2 = np.atleast_2d(axes2)
-    pair_labels = [f"Pair {i+1}" for i in range(n_pairs)]
+    pair_labels = [f"R{i+1}" for i in range(n_pairs)]
 
     for i in range(n_runs):
         rr = i // ncol
         cc = i % ncol
         ax2 = axes2[rr, cc]
-        ax2.set_title(f"Run {i+1} QoO Scores by Pair", fontsize=9)
+        ax2.set_title(f"Run {i+1} QoO Scores by Requirement", fontsize=9)
         ax2.set_ylim(global_min_qoo_y, global_max_qoo_y)
         ax2.grid(True)
 
@@ -252,7 +253,7 @@ def run_qoo_one_pair_per_row_hybrid(
         # (A) Fill the left column: each pair's requirement plot
         for pair_idx, (nrp_dict, nrpou_dict) in enumerate(nrp_nrpou_pairs):
             ax_req = left_axes[pair_idx]
-            ax_req.set_title(f"Pair {pair_idx+1}: Requirements", fontsize=10)
+            ax_req.set_title(f"Requirement R{pair_idx+1}", fontsize=10)
             ax_req.set_xlim(global_min_req_x, global_max_req_x)
             ax_req.grid(True)
 
@@ -281,7 +282,7 @@ def run_qoo_one_pair_per_row_hybrid(
 
         # (B) Fill the single big subplot on the right with one run's boxplot
         # We combine all pairs => one box per pair
-        ax_box_single.set_title("First Run Only: QoO (All Pairs)", fontsize=10)
+        ax_box_single.set_title("First Run Only: QoO (All Requirements)", fontsize=10)
         ax_box_single.set_ylim(global_min_qoo_y, global_max_qoo_y)
         ax_box_single.set_ylabel("QoO Score")
         ax_box_single.grid(True)
@@ -291,7 +292,7 @@ def run_qoo_one_pair_per_row_hybrid(
         pair_labels_first_run = []
         for pair_idx in range(n_pairs):
             data_first_run.append(qoo_scores[pair_idx][0])  # run_idx=0
-            pair_labels_first_run.append(f"Pair {pair_idx+1}")
+            pair_labels_first_run.append(f"R{pair_idx+1}")
 
         ax_box_single.boxplot(
             data_first_run,
@@ -412,7 +413,8 @@ if __name__ == "__main__":
         sub_frequency=10,
         iterations=100,
         output_file=f"qoo_nrp_var_{experiment}.png",
-        figure_title="Gradually Changing NRP (NRPOU Fixed)"
+        figure_title="Gradually Changing NRP (NRPOU Fixed)",
+        simulation_time=300
     )
 
     # -- 2) Gradually Increasing NRPOU (NRP fixed)
@@ -423,7 +425,8 @@ if __name__ == "__main__":
         sub_frequency=10,
         iterations=100,
         output_file=f"qoo_nrpou_var_{experiment}.png",
-        figure_title="Gradually Changing NRPOU (NRP Fixed)"
+        figure_title="Gradually Changing NRPOU (NRP Fixed)",
+        simulation_time=300
     )
 
     # -- 3) Shifted Percentiles
@@ -434,5 +437,6 @@ if __name__ == "__main__":
         sub_frequency=10,
         iterations=100,
         output_file=f"qoo_shifted_pct_{experiment}.png",
-        figure_title="Shifting Percentile Definitions"
+        figure_title="Shifting Percentile Definitions",
+        simulation_time=300
     )
