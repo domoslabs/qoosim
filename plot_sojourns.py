@@ -23,7 +23,7 @@ def plot_simulation_results(input_folder, output_file="simulation_plots.png"):
         axes = axes.reshape(1, -1)
 
     # Add title to the figure
-    fig.suptitle("WiFi Simulation Results: Sojourn Times and CDFs", fontsize=20)  # y adjusts spacing from top
+    fig.suptitle("Simulation Results: Sojourn Times and CDFs", fontsize=20)  # y adjusts spacing from top
 
     for i, result_file in enumerate(result_files):
         results = np.load(result_file, allow_pickle=True)
